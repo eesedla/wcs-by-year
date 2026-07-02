@@ -79,7 +79,6 @@ body {
 
 .toggle-label {
   font-size: 0.75rem;
-  font-family: 'Inter', Arial, sans-serif;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -89,43 +88,33 @@ body {
 }
 
 .toggle-btn {
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: 'Roboto Condensed', sans-serif;
   font-size: 0.85rem;
   font-weight: 500;
   padding: 6px 14px;
   border-radius: 2px;
-  border: 1px solid #404F54;
+  border: 1px solid #ccd8db;
   background: #fff;
   cursor: pointer;
-  transition: all 0.12s;
-  color: #404F54;
+  transition: border-color 0.18s, background 0.18s;
+  color: #23685b;
   white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 5px;
 }
 
-.toggle-btn:hover { border-color: #404F54; color: #404F54; }
-.toggle-btn.active { color: white; border-color: transparent; }
-.toggle-btn .dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.85;
-  flex-shrink: 0;
-}
-.toggle-btn.active .dot { background: rgba(255,255,255,0.8); }
+.toggle-btn:hover { background: transparent; border-color: #23685b; }
+.toggle-btn.active { color: #fff; border-color: transparent; background: #23685b; }
 
 /* Chart header with back button */
 .chart-header {
   padding: 10px 20px 0;
+  height: 45px;
   display: flex;
   align-items: center;
   gap: 10px;
-  min-height: 0;
+  opacity: 0;
+  transition: opacity 0.15s;
 }
-.chart-header:empty, .chart-header:not(.visible) { padding: 0; }
-.chart-header.visible { padding: 10px 20px 0; }
+.chart-header.visible { opacity: 1; }
 
 .back-btn {
   font-family: 'Roboto Condensed', 'Arial Narrow', sans-serif;
@@ -164,9 +153,20 @@ body {
 }
 
 /* Chart area */
-.chart-area {
-  padding: 20px 20px 12px;
-  position: relative;
+.chart-area { padding: 18px 14px 6px; position: relative; }
+#chart { width: 100%; height: auto; display: block; overflow: visible; }
+.col-group { cursor: default; }
+.seg { transition: opacity 0.15s ease; }
+.seg.dim { opacity: 0.06; }
+.axis-text {
+  font-family: 'Inter', sans-serif; fill: #404F54; font-size: 12px;
+}
+.axis-text.partial { opacity: 0.6; }
+.ytick { fill: #404F54; opacity: 0.5; font-size: 11px; font-family: 'Inter', sans-serif; }
+.gridline { stroke: #404F54; stroke-opacity: 0.12; stroke-width: 1; }
+.col-total {
+  font-family: 'Inter', sans-serif; font-weight: 700;
+  fill: #404F54; font-size: 12px;
 }
 
 /* Bar rows (div-based horizontal bars) */
@@ -294,64 +294,49 @@ body {
 .bar-tooltip .tt-label { flex: 1; font-size: 0.72rem; }
 .bar-tooltip .tt-count { font-size: 0.72rem; font-weight: 600; }
 
-/* SVG chart */
-.chart-svg {
-  width: 100%;
-  display: block;
-  overflow: visible;
-}
-
-.axis-label {
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: 11px;
-  fill: #404F54;
-  opacity: 0.65;
-}
-
-.svg-bar {
-  transition: opacity 0.15s;
-}
-
-.svg-bar:hover {
-  opacity: 0.82;
-  cursor: crosshair;
-}
-
 /* Legend */
 .legend {
+  padding: 4px 20px 16px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 6px 18px;
-  padding: 12px 20px;
-  border-bottom: 1px solid rgba(64, 79, 84, 0.15);
+  gap: 5px 6px;
 }
 
-.legend-item {
-  display: flex;
+.legend-chip {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: 13px;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 0.8rem;
   font-weight: 500;
   color: #404F54;
+  padding: 4px 9px 4px 7px;
+  border: 1px solid rgba(64,79,84,0.28);
+  border-radius: 2px;
+  background: #fff;
   cursor: pointer;
-  transition: opacity 0.18s ease;
-  user-select: none;
+  transition: all 0.12s;
+  line-height: 1;
 }
 
-.legend-item:hover { opacity: 0.7; }
+.legend-chip:hover { border-color: #404F54; }
 
-.legend-swatch {
-  width: 11px;
-  height: 11px;
+.legend-chip .lg-dot {
+  width: 10px;
+  height: 10px;
   border-radius: 2px;
   flex-shrink: 0;
 }
 
-/* Legend filter state */
-.legend.filtered .legend-item { opacity: 0.28; }
-.legend.filtered .legend-item.active-leg { opacity: 1; }
+.legend-chip .lg-count {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  opacity: 0.55;
+  font-weight: 500;
+}
+
+.legend-chip.muted { opacity: 0.4; }
+.legend-chip.solo { border-color: #404F54; box-shadow: 0 1px 5px rgba(0,0,0,0.12); }
 
 /* Viz note */
 .viz-note {
@@ -386,7 +371,7 @@ body {
   </div>
 
   <div class="chart-area">
-    <svg id="chartSvg" class="chart-svg" preserveAspectRatio="xMidYMid meet"
+    <svg id="chart" preserveAspectRatio="xMidYMid meet"
          aria-label="Stacked bar chart of body camera violations by year, 2016–2026"></svg>
   </div>
 
@@ -397,11 +382,11 @@ body {
 
 <script>
 const CATS = [
-  { key: 'activate',    label: 'Failed to activate',         color: '#d0d64c' },
-  { key: 'maintain',    label: 'Returned to buffering',      color: '#23685b' },
-  { key: 'upload',      label: 'Failed to upload / tag',     color: '#d64d4d' },
-  { key: 'safeguard',   label: 'Lost or damaged equipment', color: '#f4c913' },
-  { key: 'generic',     label: 'Unspecified',      color: '#a9d2cf' },
+  { key: 'generic',     label: 'Unspecified',      color: '#d0d64c' },
+  { key: 'activate',    label: 'Failed to activate',         color: '#23685b' },
+  { key: 'maintain',    label: 'Returned to buffering',      color: '#51a89a' },
+  { key: 'upload',      label: 'Failed to upload / tag',     color: '#a9d2cf' },
+  { key: 'safeguard',   label: 'Lost or damaged equipment', color: '#daeae5' },
 ];
 
 const DATA = [
@@ -430,6 +415,14 @@ const GROUP_W  = CHART_W / DATA.length;
 const BAR_W    = Math.round(GROUP_W * 0.68);
 const BAR_PAD  = (GROUP_W - BAR_W) / 2;
 
+// ── Bar entrance animation ──────────────────────────────────────
+const STAGGER_ORDER  = CATS.map(c => c.key); // bottom-to-top build order
+const STAGGER_STEP   = 0;   // ms delay between each stacked layer starting
+const SEG_DURATION   = 700;  // ms duration of each segment's own grow-in
+const TOTAL_DURATION = STAGGER_STEP * (STAGGER_ORDER.length - 1) + SEG_DURATION + 250;
+const ease = t => 1 - Math.pow(1 - t, 3);
+let animGen = 0;
+
 const NS = 'http://www.w3.org/2000/svg';
 function el(tag, attrs = {}, text) {
   const node = document.createElementNS(NS, tag);
@@ -451,30 +444,32 @@ const chartHdr   = document.getElementById('chartHeader');
 const chartTitle = document.getElementById('chartTitle');
 const chartSub   = document.getElementById('chartSubtitle');
 const legendEl   = document.getElementById('legend');
-const svg        = document.getElementById('chartSvg');
+const svg        = document.getElementById('chart');
 
 svg.setAttribute('viewBox', `0 0 ${SVG_W} ${SVG_H}`);
 
 // ── Legend (clickable filter) ────────────────────────────────────
 CATS.forEach(cat => {
-  const item = document.createElement('div');
-  item.className = 'legend-item';
-  item.dataset.key = cat.key;
-  item.innerHTML = `<div class="legend-swatch" style="background:${cat.color}"></div>${cat.label}`;
-  item.addEventListener('click', () => {
+  const total = DATA.reduce((sum, d) => sum + (d[cat.key] || 0), 0);
+  const chip = document.createElement('div');
+  chip.className = 'legend-chip';
+  chip.dataset.key = cat.key;
+  chip.innerHTML = `<div class="lg-dot" style="background:${cat.color}"></div>${cat.label}<span class="lg-count">${total}</span>`;
+  chip.addEventListener('click', () => {
     activeFilter === cat.key ? clearFilter() : setFilter(cat);
   });
-  legendEl.appendChild(item);
+  legendEl.appendChild(chip);
 });
 
 function setFilter(cat) {
   activeFilter = cat.key;
-  legendEl.classList.add('filtered');
-  legendEl.querySelectorAll('.legend-item').forEach(item => {
-    item.classList.toggle('active-leg', item.dataset.key === cat.key);
+  legendEl.querySelectorAll('.legend-chip').forEach(chip => {
+    const isActive = chip.dataset.key === cat.key;
+    chip.classList.toggle('solo', isActive);
+    chip.classList.toggle('muted', !isActive);
   });
-  svg.querySelectorAll('.svg-bar').forEach(r => {
-    r.style.opacity = r.dataset.cat === cat.key ? '1' : '0.1';
+  svg.querySelectorAll('.seg').forEach(r => {
+    r.classList.toggle('dim', r.dataset.cat !== cat.key);
   });
   chartHdr.classList.add('visible');
   chartTitle.textContent = cat.label;
@@ -483,9 +478,10 @@ function setFilter(cat) {
 
 function clearFilter() {
   activeFilter = null;
-  legendEl.classList.remove('filtered');
-  legendEl.querySelectorAll('.legend-item').forEach(i => i.classList.remove('active-leg'));
-  svg.querySelectorAll('.svg-bar').forEach(r => { r.style.opacity = ''; });
+  legendEl.querySelectorAll('.legend-chip').forEach(chip => {
+    chip.classList.remove('solo', 'muted');
+  });
+  svg.querySelectorAll('.seg').forEach(r => r.classList.remove('dim'));
   chartHdr.classList.remove('visible');
   chartTitle.textContent = '';
   chartSub.textContent = '';
@@ -497,17 +493,13 @@ function clearFilter() {
   // gridline
   svg.appendChild(el('line', {
     x1: ML, y1: y, x2: ML + CHART_W, y2: y,
-    stroke: val === 0 ? 'rgba(64,79,84,0.18)' : 'rgba(64,79,84,0.08)',
-    'stroke-width': 1,
+    class: 'gridline',
   }));
   // label
   svg.appendChild(el('text', {
     x: ML - 6, y: y + 4,
     'text-anchor': 'end',
-    'font-family': 'Inter, Arial, sans-serif',
-    'font-size': 10,
-    fill: '#404F54',
-    opacity: 0.4,
+    class: 'ytick',
   }, val));
 });
 
@@ -516,6 +508,8 @@ DATA.forEach((d, i) => {
   const partial = false;
   const x = barLeft(i);
   const baseline = MT + CHART_H;
+
+  const group = el('g', { class: 'col-group' });
 
   // Stacked segments from bottom up
   let curY = baseline;
@@ -526,20 +520,26 @@ DATA.forEach((d, i) => {
     curY -= h;
 
     const rect = el('rect', { x, y: curY, width: BAR_W, height: h, fill: cat.color });
-    rect.classList.add('svg-bar');
+    rect.classList.add('seg');
     rect.dataset.cat = cat.key;
-    svg.appendChild(rect);
+    rect.dataset.group = cat.key;
+    rect.dataset.finalY = curY;
+    rect.dataset.finalHeight = h;
+    group.appendChild(rect);
   });
 
+  // Total label above the stack
+  group.appendChild(el('text', {
+    x: barMidX(i), y: curY - 6,
+    'text-anchor': 'middle',
+    class: 'col-total',
+  }, d.total));
+
   // Year label below baseline
-  svg.appendChild(el('text', {
+  group.appendChild(el('text', {
     x: barMidX(i), y: baseline + 18,
     'text-anchor': 'middle',
-    'font-family': 'Roboto Condensed, Arial Narrow, sans-serif',
-    'font-size': 11,
-    'font-weight': 600,
-    fill: '#404F54',
-    opacity: partial ? 0.5 : 1,
+    class: 'axis-text' + (partial ? ' partial' : ''),
   }, d.year + (partial ? '*' : '')));
 
   // Invisible hover zone — full column height for consistent tooltip
@@ -550,8 +550,72 @@ DATA.forEach((d, i) => {
   zone.addEventListener('mouseenter', e => showTooltip(e, d));
   zone.addEventListener('mousemove',  e => moveTooltip(e));
   zone.addEventListener('mouseleave', hideTooltip);
-  svg.appendChild(zone);
+  group.appendChild(zone);
+
+  svg.appendChild(group);
 });
+
+// ── Bar entrance animation ─────────────────────────────────────
+function hideBars() {
+  const baseline = MT + CHART_H;
+  svg.querySelectorAll('.seg').forEach(rect => {
+    rect.setAttribute('y', baseline);
+    rect.setAttribute('height', 0);
+  });
+  svg.querySelectorAll('.col-total').forEach(l => l.setAttribute('opacity', '0'));
+}
+
+function animateBars() {
+  const gen = ++animGen;
+  const baseline = MT + CHART_H;
+  const start = performance.now();
+
+  svg.querySelectorAll('.seg').forEach(rect => {
+    const finalY = parseFloat(rect.dataset.finalY);
+    const finalH = parseFloat(rect.dataset.finalHeight);
+    const delay  = STAGGER_ORDER.indexOf(rect.dataset.group) * STAGGER_STEP;
+    rect.setAttribute('y', baseline);
+    rect.setAttribute('height', 0);
+    function frame(now) {
+      if (gen !== animGen) return;
+      const elapsed = now - start - delay;
+      if (elapsed < 0) { requestAnimationFrame(frame); return; }
+      const t = Math.min(elapsed / SEG_DURATION, 1);
+      const e = ease(t);
+      rect.setAttribute('height', Math.max(finalH * e, 0));
+      rect.setAttribute('y', baseline + (finalY - baseline) * e);
+      if (t < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  });
+
+  const totals = Array.from(svg.querySelectorAll('.col-total'));
+  totals.forEach(l => l.setAttribute('opacity', '0'));
+  const labelStart = 0.75;
+  function labelFrame(now) {
+    if (gen !== animGen) return;
+    const t = Math.min((now - start) / TOTAL_DURATION, 1);
+    const op = Math.max(0, Math.min(1, (t - labelStart) / (1 - labelStart)));
+    totals.forEach(l => l.setAttribute('opacity', op));
+    if (t < 1) requestAnimationFrame(labelFrame);
+  }
+  requestAnimationFrame(labelFrame);
+}
+
+const xAxisSentinel = document.createElement('div');
+xAxisSentinel.style.cssText = 'position:absolute;bottom:0;left:0;width:1px;height:1px;pointer-events:none;';
+document.querySelector('.chart-area').appendChild(xAxisSentinel);
+
+let chartAnimated = false;
+const barObserver = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting && !chartAnimated) {
+    chartAnimated = true;
+    animateBars();
+  }
+}, { threshold: 0 });
+
+hideBars();
+barObserver.observe(xAxisSentinel);
 
 // ── Tooltip ──────────────────────────────────────────────────────
 function showTooltip(e, d) {
@@ -582,8 +646,11 @@ function moveTooltip(e) {
   let top  = e.clientY - th / 2;
 
   if (left + tw > window.innerWidth  - 10) left = e.clientX - tw - 14;
+  left = Math.max(10, Math.min(left, window.innerWidth  - tw - 10));
+
   if (top < 10)                            top  = 10;
   if (top + th > window.innerHeight  - 10) top  = window.innerHeight - th - 10;
+  top = Math.max(10, top);
 
   tooltip.style.left = left + 'px';
   tooltip.style.top  = top  + 'px';
