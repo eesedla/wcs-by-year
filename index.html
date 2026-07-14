@@ -387,10 +387,12 @@ body {
 <div class="bar-tooltip" id="tooltip"></div>
 
 <script>
+// Ordered biggest-total-first (drawn at the base of the stack) so the
+// categories driving year-to-year variation are easiest to read.
 const CATS = [
-  { key: 'generic',     label: 'Unspecified',      color: '#d0d64c' },
   { key: 'activate',    label: 'Failed to activate',         color: '#23685b' },
-  { key: 'maintain',    label: 'Returned to buffering',      color: '#5fa896' },
+  { key: 'generic',     label: 'Unspecified',      color: '#d0d64c' },
+  { key: 'maintain',    label: 'Ended recording early',      color: '#5fa896' },
   { key: 'upload',      label: 'Failed to upload / tag',     color: '#a9d2cf' },
   { key: 'safeguard',   label: 'Lost or damaged equipment', color: '#dbe7e3' },
 ];
