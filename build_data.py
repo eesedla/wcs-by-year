@@ -40,9 +40,9 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
-HERE       = Path(__file__).parent
-INDEX_HTML = HERE / "index.html"
-CSV_PATH   = HERE / "Divisional Notice Discipline Cases-Body Camera Violations.csv"
+HERE      = Path(__file__).parent
+DATA_JSON = HERE / "data.json"
+CSV_PATH  = HERE / "Divisional Notice Discipline Cases-Body Camera Violations.csv"
 
 CATS = ["activate", "maintain", "upload", "safeguard", "generic"]
 
@@ -109,23 +109,12 @@ for y in sorted(year_total):
     entry.update({c: year_counts[y][c] for c in CATS})
     years_out.append(entry)
 
-# ── Write back into index.html ───────────────────────────────────────────────
+# ── Write data.json ───────────────────────────────────────────────────────────
 
-raw = INDEX_HTML.read_text(encoding="utf-8")
-entries = ",\n".join(
-    "  { year: %d, total: %d, activate: %d, maintain: %d, upload: %d, safeguard: %d, generic: %d }"
-    % (d["year"], d["total"], d["activate"], d["maintain"], d["upload"], d["safeguard"], d["generic"])
-    for d in years_out
-)
-data_js = f"const DATA = [\n{entries},\n];"
-
-new_raw, n = re.subn(r"const DATA = \[.*?\];", data_js, raw, count=1, flags=re.DOTALL)
-if n == 0:
-    raise RuntimeError("Could not find 'const DATA = [...];' in index.html")
-INDEX_HTML.write_text(new_raw, encoding="utf-8")
+DATA_JSON.write_text(json.dumps(years_out, separators=(",", ":")), encoding="utf-8")
 
 total = sum(year_total.values())
-print(f"Updated {INDEX_HTML.name} — {total} dated WCS cases across {len(years_out)} years.")
+print(f"Wrote {DATA_JSON.name} — {total} dated WCS cases across {len(years_out)} years.")
 for d in years_out:
     print(f"  {d['year']}: total={d['total']}  activate={d['activate']} maintain={d['maintain']} "
           f"upload={d['upload']} safeguard={d['safeguard']} generic={d['generic']}")
